@@ -5,7 +5,7 @@ object Dependencies {
     val scala212 = "2.12.14"
     val scala213 = "2.13.6"
 
-    val trace4cats = "0.12.0-RC1+156-7ea07b63"
+    val trace4cats = "0.12.0-RC1+188-05746b3c"
 
     val embeddedRedis = "0.7.3"
     val redis4cats = "1.0.0-RC3"
