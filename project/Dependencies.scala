@@ -8,7 +8,7 @@ object Dependencies {
     val trace4cats = "0.12.0-RC1+156-7ea07b63"
 
     val embeddedRedis = "0.7.3"
-    val redis4cats = "1.0.0-RC3"
+    val redis4cats = "1.0.0"
     val scaffeine = "4.1.0"
 
     val kindProjector = "0.13.0"
