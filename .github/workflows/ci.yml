@@ -59,7 +59,7 @@ jobs:
         run: sbt --client '++${{ matrix.scala }}; test'
 
       - name: Compress target directories
-        run: tar cf targets.tar target modules/tail-sampling-cache-store/target modules/tail-sampling-redis-store/target project/target
+        run: tar cf targets.tar target modules/tail-sampling-caffeine/target modules/tail-sampling-cache-store/target modules/tail-sampling-redis-store/target project/target
 
       - name: Upload target directories
         uses: actions/upload-artifact@v2
