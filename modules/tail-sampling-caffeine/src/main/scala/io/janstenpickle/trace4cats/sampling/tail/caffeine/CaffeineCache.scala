@@ -4,9 +4,9 @@ import cats.effect.kernel.Sync
 import cats.syntax.functor._
 import com.github.benmanes.caffeine.cache.{Caffeine => JCaffeine}
 
+import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 import scala.jdk.CollectionConverters._
-import scala.jdk.DurationConverters._
 
 trait CaffeineCache[F[_], K, V] {
   def put(key: K, value: V): F[Unit]
@@ -22,7 +22,8 @@ object CaffeineCache {
     F.delay {
       val builder = JCaffeine
         .newBuilder()
-        .expireAfterAccess(expiresAfter.toJava)
+        .expireAfterAccess(expiresAfter.toNanos, TimeUnit.NANOSECONDS)
+        .asInstanceOf[JCaffeine[Any, Any]]
       maxSize.fold(builder)(builder.maximumSize).build[K, V]()
     }.map(underlying =>
       new CaffeineCache[F, K, V] {
