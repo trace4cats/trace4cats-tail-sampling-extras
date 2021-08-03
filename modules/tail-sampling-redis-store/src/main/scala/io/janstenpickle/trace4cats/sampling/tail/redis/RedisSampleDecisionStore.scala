@@ -6,7 +6,6 @@ import cats.syntax.flatMap._
 import cats.syntax.functor._
 import cats.syntax.parallel._
 import cats.{Applicative, Parallel}
-import com.github.blemale.scaffeine.Scaffeine
 import dev.profunktor.redis4cats.codecs.Codecs
 import dev.profunktor.redis4cats.codecs.splits.SplitEpi
 import dev.profunktor.redis4cats.data.RedisCodec
@@ -14,6 +13,7 @@ import dev.profunktor.redis4cats.log4cats._
 import dev.profunktor.redis4cats.{Redis, RedisCommands}
 import io.janstenpickle.trace4cats.model.{SampleDecision, TraceId}
 import io.janstenpickle.trace4cats.sampling.tail.SampleDecisionStore
+import io.janstenpickle.trace4cats.sampling.tail.caffeine.CaffeineCache
 import io.lettuce.core.ClientOptions
 import org.typelevel.log4cats.Logger
 
@@ -46,22 +46,17 @@ object RedisSampleDecisionStore {
     ttl: FiniteDuration,
     maximumLocalCacheSize: Option[Long]
   ): F[SampleDecisionStore[F]] =
-    Sync[F]
-      .delay {
-        val builder = Scaffeine().expireAfterAccess(ttl)
-
-        maximumLocalCacheSize.fold(builder)(builder.maximumSize).build[TraceId, SampleDecision]()
-      }
+    CaffeineCache[F, TraceId, SampleDecision](ttl, maximumLocalCacheSize)
       .map { cache =>
         def cacheDecision(traceId: TraceId, decision: F[Option[SampleDecision]]) =
           decision.flatTap {
-            case Some(value) => Sync[F].delay(cache.put(traceId, value))
+            case Some(value) => cache.put(traceId, value)
             case None => Applicative[F].unit
           }
 
         new SampleDecisionStore[F] {
           override def getDecision(traceId: TraceId): F[Option[SampleDecision]] =
-            Sync[F].delay(cache.getIfPresent(traceId)).flatMap {
+            cache.getIfPresent(traceId).flatMap {
               case v @ Some(_) => Applicative[F].pure(v)
               case None => cacheDecision(traceId, cmd.get(keyPrefix -> traceId))
             }
@@ -72,25 +67,25 @@ object RedisSampleDecisionStore {
             def getRemote(remainder: Set[TraceId]) = for {
               remote <- cmd.mGet(remainder.map(keyPrefix -> _))
               remoteMapped = remote.map { case ((_, traceId), decision) => traceId -> decision }
-              _ <- Sync[F].delay(cache.putAll(remoteMapped))
+              _ <- cache.putAll(remoteMapped)
             } yield remoteMapped
 
             for {
-              local <- Sync[F].delay(cache.getAllPresent(traceIds))
+              local <- cache.getAllPresent(traceIds)
               remainder = traceIds.diff(local.keySet)
               remote <- if (remainder.isEmpty) Applicative[F].pure(Map.empty) else getRemote(remainder)
             } yield local ++ remote
           }
 
           override def storeDecision(traceId: TraceId, sampleDecision: SampleDecision): F[Unit] =
-            cmd.setEx(keyPrefix -> traceId, sampleDecision, ttl) >> Sync[F].delay(cache.put(traceId, sampleDecision))
+            cmd.setEx(keyPrefix -> traceId, sampleDecision, ttl) >> cache.put(traceId, sampleDecision)
 
           override def storeDecisions(decisions: Map[TraceId, SampleDecision]): F[Unit] = if (decisions.isEmpty)
             Applicative[F].unit
           else
             decisions.toList.parTraverse_ { case (traceId, decision) =>
               cmd.setEx(keyPrefix -> traceId, decision, ttl)
-            } >> Sync[F].delay(cache.putAll(decisions))
+            } >> cache.putAll(decisions)
         }
 
       }
