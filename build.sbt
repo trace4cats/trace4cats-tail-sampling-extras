@@ -35,13 +35,21 @@ lazy val root = (project in file("."))
   .settings(name := "Trace4Cats Tail Sampling Extras")
   .aggregate(`tail-sampling-cache-store`, `tail-sampling-redis-store`)
 
+lazy val `tail-sampling-caffeine` = (project in file("modules/tail-sampling-caffeine"))
+  .settings(publishSettings)
+  .settings(
+    name := "trace4cats-tail-sampling-caffeine",
+    libraryDependencies ++= Seq(Dependencies.caffeine, Dependencies.catsEffectKernel, Dependencies.collectionCompat)
+  )
+
 lazy val `tail-sampling-cache-store` = (project in file("modules/tail-sampling-cache-store"))
   .settings(publishSettings)
   .settings(
     name := "trace4cats-tail-sampling-cache-store",
-    libraryDependencies ++= Seq(Dependencies.trace4catsTailSampling, Dependencies.scaffeine),
+    libraryDependencies ++= Seq(Dependencies.trace4catsTailSampling),
     libraryDependencies ++= Seq(Dependencies.trace4catsTestkit).map(_ % Test)
   )
+  .dependsOn(`tail-sampling-caffeine`)
 
 lazy val `tail-sampling-redis-store` = (project in file("modules/tail-sampling-redis-store"))
   .settings(publishSettings)
@@ -50,8 +58,8 @@ lazy val `tail-sampling-redis-store` = (project in file("modules/tail-sampling-r
     libraryDependencies ++= Seq(
       Dependencies.trace4catsTailSampling,
       Dependencies.redis4cats,
-      Dependencies.redis4catsLog4cats,
-      Dependencies.scaffeine
+      Dependencies.redis4catsLog4cats
     ),
     libraryDependencies ++= Seq(Dependencies.trace4catsTestkit, Dependencies.embeddedRedis).map(_ % Test)
   )
+  .dependsOn(`tail-sampling-caffeine`)
