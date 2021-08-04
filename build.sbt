@@ -33,7 +33,7 @@ lazy val publishSettings = commonSettings ++ Seq(
 lazy val root = (project in file("."))
   .settings(noPublishSettings)
   .settings(name := "Trace4Cats Tail Sampling Extras")
-  .aggregate(`tail-sampling-cache-store`, `tail-sampling-redis-store`)
+  .aggregate(`tail-sampling-caffeine`, `tail-sampling-cache-store`, `tail-sampling-redis-store`)
 
 lazy val `tail-sampling-caffeine` = (project in file("modules/tail-sampling-caffeine"))
   .settings(publishSettings)
