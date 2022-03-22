@@ -12,7 +12,7 @@ object Dependencies {
     val embeddedRedis = "0.7.3"
     val redis4cats = "1.1.1"
     val caffeine = "2.9.3"
-    val collectionCompat = "2.6.0"
+    val collectionCompat = "2.7.0"
 
     val kindProjector = "0.13.2"
     val betterMonadicFor = "0.3.1"
