@@ -12,8 +12,8 @@
 Add it to your `build.sbt`:
 
 ```scala
-"io.janstenpickle" %% "trace4cats-tail-sampling-cache-store" % "0.13.0"
-"io.janstenpickle" %% "trace4cats-tail-sampling-redis-store" % "0.13.0"
+"io.janstenpickle" %% "trace4cats-tail-sampling-cache-store" % "0.13.1"
+"io.janstenpickle" %% "trace4cats-tail-sampling-redis-store" % "0.13.1"
 ```
 
 ## Contributing
