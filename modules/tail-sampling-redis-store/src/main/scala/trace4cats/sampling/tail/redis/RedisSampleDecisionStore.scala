@@ -1,4 +1,4 @@
-package io.janstenpickle.trace4cats.sampling.tail.redis
+package trace4cats.sampling.tail.redis
 
 import cats.data.NonEmptyList
 import cats.effect.kernel.{Async, Resource, Sync}
@@ -11,11 +11,11 @@ import dev.profunktor.redis4cats.codecs.splits.SplitEpi
 import dev.profunktor.redis4cats.data.RedisCodec
 import dev.profunktor.redis4cats.log4cats._
 import dev.profunktor.redis4cats.{Redis, RedisCommands}
-import io.janstenpickle.trace4cats.model.{SampleDecision, TraceId}
-import io.janstenpickle.trace4cats.sampling.tail.SampleDecisionStore
-import io.janstenpickle.trace4cats.sampling.tail.caffeine.CaffeineCache
 import io.lettuce.core.ClientOptions
 import org.typelevel.log4cats.Logger
+import trace4cats.model.{SampleDecision, TraceId}
+import trace4cats.sampling.tail.SampleDecisionStore
+import trace4cats.sampling.tail.caffeine.CaffeineCache
 
 import scala.concurrent.duration.FiniteDuration
 

@@ -6,7 +6,7 @@ object Dependencies {
     val scala213 = "2.13.8"
     val scala3 = "3.1.2"
 
-    val trace4cats = "0.13.1"
+    val trace4cats = "0.13.1+67-a7d9b849"
 
     val catsEffect = "3.3.12"
     val embeddedRedis = "0.7.3"

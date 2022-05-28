@@ -1,10 +1,11 @@
-package io.janstenpickle.trace4cats.sampling.tail.caffeine
+package trace4cats.sampling.tail.caffeine
+
+import java.util.concurrent.TimeUnit
 
 import cats.effect.kernel.Sync
 import cats.syntax.functor._
 import com.github.benmanes.caffeine.cache.{Caffeine => JCaffeine}
 
-import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.FiniteDuration
 import scala.jdk.CollectionConverters._
 
