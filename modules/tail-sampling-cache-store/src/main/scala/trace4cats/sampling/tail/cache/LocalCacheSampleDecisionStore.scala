@@ -1,10 +1,10 @@
-package io.janstenpickle.trace4cats.sampling.tail.cache
+package trace4cats.sampling.tail.cache
 
 import cats.effect.kernel.Sync
 import cats.syntax.functor._
-import io.janstenpickle.trace4cats.model.{SampleDecision, TraceId}
-import io.janstenpickle.trace4cats.sampling.tail.SampleDecisionStore
-import io.janstenpickle.trace4cats.sampling.tail.caffeine.CaffeineCache
+import trace4cats.model.{SampleDecision, TraceId}
+import trace4cats.sampling.tail.SampleDecisionStore
+import trace4cats.sampling.tail.caffeine.CaffeineCache
 
 import scala.concurrent.duration._
 
