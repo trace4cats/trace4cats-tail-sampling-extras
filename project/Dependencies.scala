@@ -4,15 +4,15 @@ object Dependencies {
   object Versions {
     val scala212 = "2.12.16"
     val scala213 = "2.13.8"
-    val scala3 = "3.1.2"
+    val scala3 = "3.1.3"
 
-    val trace4cats = "0.13.1+67-a7d9b849"
+    val trace4cats = "0.13.1+93-3b55f15a"
 
-    val catsEffect = "3.3.12"
+    val catsEffect = "3.3.14"
     val embeddedRedis = "0.7.3"
-    val redis4cats = "1.1.1"
+    val redis4cats = "1.2.0"
     val caffeine = "2.9.3"
-    val collectionCompat = "2.7.0"
+    val collectionCompat = "2.8.0"
 
     val kindProjector = "0.13.2"
     val betterMonadicFor = "0.3.1"
