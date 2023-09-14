@@ -10,7 +10,7 @@ object Dependencies {
 
     val catsEffect = "3.3.14"
     val embeddedRedis = "0.7.3"
-    val redis4cats = "1.2.0"
+    val redis4cats = "1.5.0"
     val caffeine = "2.9.3"
     val collectionCompat = "2.8.1"
 
