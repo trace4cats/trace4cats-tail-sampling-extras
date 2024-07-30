@@ -14,7 +14,7 @@ object Dependencies {
     val caffeine = "2.9.3"
     val collectionCompat = "2.8.1"
 
-    val kindProjector = "0.13.2"
+    val kindProjector = "0.13.3"
     val betterMonadicFor = "0.3.1"
   }
 
